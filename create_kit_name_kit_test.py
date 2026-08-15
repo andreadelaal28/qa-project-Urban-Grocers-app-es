@@ -8,9 +8,11 @@ def get_kit_body(kit_name):
 def get_new_user_token():
    response = sender_stand_request.post_new_user(data.user_body)
    return response.json()['authToken']
-def positive_assert (kit_body):
-    response=sender_stand_request.post_new_client_kit(kit_body,get_new_user_token())
+
+def positive_assert(kit_body):
+    response = sender_stand_request.post_new_client_kit(kit_body, get_new_user_token())
     assert response.status_code == 201
+    assert response.json()["name"] == kit_body["name"]
 
 def negative_assert_code_400(kit_body):
         response = sender_stand_request.post_new_client_kit(kit_body, get_new_user_token())
@@ -19,6 +21,7 @@ def negative_assert_code_400(kit_body):
 def test_1_kit_name_min_length():
     new_kit_body = get_kit_body("g")
     positive_assert(new_kit_body)
+
 
 def test_2_kit_name_max_length():
     new_kit_body = get_kit_body("g" * 511)
